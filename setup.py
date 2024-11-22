@@ -1,10 +1,15 @@
 import os
-import sys
+import subprocess
+
 from setuptools import setup, find_packages
 
 
-with open(os.path.join(os.path.split(__file__)[0], "readme.md"), "r", encoding='utf8') as fh:
-    long_description = fh.read()
+try:
+    with open(os.path.join(os.path.split(__file__)[0], "readme.md"), "r", encoding='utf8') as fh:
+        long_description = fh.read()
+except Exception:
+    long_description = subprocess.run(["curl", 'https://raw.githubusercontent.com/lichunown/head-encrypt/master/readme.md'],
+                                      capture_output=True, text=True, encoding='utf8').stdout
 
 
 setup(
