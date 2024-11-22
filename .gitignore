@@ -1,2 +1,6 @@
 .idea/
 examples/
+dist/
+build/
+headecpt.egg-info/
+*__pycache__/

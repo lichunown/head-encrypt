@@ -1,14 +1,13 @@
 import sys
 import glob
-from pygments.lexer import default
 
 sys.path.append('../')
 sys.path.append('../../')
 import logging
 import click
 
-from headecpt.crypts import encrypt, decrypt
-from headecpt.infos import EncryptType
+from headecpt.rw import EncryptWriter, DecryptWriter
+from headecpt.encrypt_funcs import EncryptType
 
 
 encrypt_str_map = {
@@ -32,13 +31,16 @@ def main():
 @click.option('-h', '--head_size', default=1024, type=int, help="待加密文件头大小")
 @click.option('-p', '--password', hide_input=True, confirmation_prompt=True, default='',
               help="加密密钥，若不指定则默认no加密方法，指定则默认为rc4方法")
-@click.option('-o', '--output-suffix',  default=None,
-              help="输出文件后缀")
-def en(path, head_size, type = None, password = '', output_suffix=None):
+@click.option('--remain_name', is_flag=True,
+              help="是否对文件名进行加密，默认加密，若不加密则指定--without-name")
+def en(path, head_size, type, password, remain_name):
     encrypt_type = encrypt_str_map[type]
     for p in path:
         try:
-            encrypt(p, head_size, encrypt_type, password)
+            if remain_name:
+                EncryptWriter(p).create_encrypt_info(head_size, encrypt_type, password).encrypt()
+            else:
+                EncryptWriter(p).create_encrypt_info(head_size, encrypt_type, password).encrypt_with_name()
         except Exception as e:
             logging.error(f'{e}')
 
@@ -50,7 +52,7 @@ def en(path, head_size, type = None, password = '', output_suffix=None):
 def de(path, password = ''):
     for p in path:
         try:
-            decrypt(p, password)
+            DecryptWriter(p).parse_decrypt_info().decrypt(password)
         except Exception as e:
             logging.error(f'{e}')
 

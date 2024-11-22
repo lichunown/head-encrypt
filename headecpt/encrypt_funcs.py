@@ -1,19 +1,12 @@
-from enum import IntEnum
 from typing import Callable, Dict
 
+from headecpt.basic_struct import ShortSizeEnum
 
-class EncryptType(IntEnum):
+
+class EncryptType(ShortSizeEnum):
     NO_ENCRYPT = 0
     RC4 = 1
 
-    def to_bytes(self):  # noqa
-        return super().to_bytes(2, "big", signed=False)
-
-    @classmethod
-    def from_bytes(cls, _bytes, byteorder = "big", *, signed = False):
-        if len(_bytes) != 2 or byteorder !="big" or signed != False:
-            raise ValueError
-        return super().from_bytes(_bytes, "big", signed=signed)
 
 
 def no_encrypt_func(key: str, x: bytes) -> bytes:
