@@ -15,11 +15,11 @@ setup(
     description="encrypt/decrypt file header for simple and quick encrypt/decrypt",
     long_description=long_description,
     long_description_content_type="text/markdown",
-    url="",
+    url="https://github.com/lichunown/head-encrypt.git",
 
     classifiers=[
         "Programming Language :: Python :: 3",
-        "License :: OSI Approved :: GPL v3",
+        "License :: OSI Approved :: MIT",
         "Operating System :: OS Independent",
     ],
 
