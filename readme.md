@@ -1,6 +1,9 @@
 # head-encrypt
 
 ## 简介
+
+[pypi](https://pypi.org/project/headecpt/)
+
 `head-encrypt` 是一款创新的文件加密工具，专门设计用于快速且高效地保护文件的首部信息。
 在许多情况下，完全加密大型文件既不实际又耗时，尤其是当您只想防止未经授权的访问者识别文件类型或内容时。
 `head-encrypt`提供了一种解决方案，通过仅加密文件的头部部分，既减少了加密过程所需的时间，又显著降低了磁盘空间的占用。
@@ -17,7 +20,14 @@
 
 ## 安装指南
 
-基于命令行形式编译安装
+- 通过pip进行安装
+
+```bash
+pip install headecpt
+```
+
+
+- 或采用离线方式，进行源码安装
 ```bash
 git clone https://github.com/lichunown/head-encrypt.git
 cd head-encrypt
