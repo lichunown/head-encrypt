@@ -17,5 +17,12 @@
 
 ## 安装指南
 
+基于命令行形式编译安装
+```bash
+git clone https://github.com/lichunown/head-encrypt.git
+cd head-encrypt
+python setup.py install
+```
+
 ## 使用方法
 
