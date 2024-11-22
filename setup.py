@@ -14,7 +14,7 @@ except Exception:
 
 setup(
     name='headecpt',
-    version="0.1.0",
+    version="0.1.2",
     author="lcy",
     author_email="lichunyang_1@outlook.com",
     description="encrypt/decrypt file header for simple and quick encrypt/decrypt",
