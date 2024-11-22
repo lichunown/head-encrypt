@@ -31,6 +31,8 @@ class EncryptWriter(object):
         self.after_encrypt_data: Optional[bytes] = None
         self.extra_info: Dict = {}
 
+        self.new_name = None
+
     @property
     def file(self) -> _io.BufferedRandom:
         if self._file is None or self._file.closed:
@@ -100,6 +102,7 @@ class EncryptWriter(object):
         dir_path, filename = os.path.split(self.path)
         if new_name is None:
             new_name = hashlib.md5(self.path.encode('utf8')).hexdigest() + '.hep'
+            self.new_name = new_name
         self.extra_info.update({'filename': filename})
         self.encrypt()
         self.rename(os.path.join(dir_path, new_name))
@@ -122,7 +125,7 @@ class DecryptWriter(object):
 
         self.head_info: Optional[HeadInfo] = None
         self.dynamic_data: Optional[DynamicData] = None
-
+        self.new_path = None
         self.parse_decrypt_info()
 
     @property
@@ -156,7 +159,7 @@ class DecryptWriter(object):
         self.file.seek(self.head_info.total_size, 0)
         self.file.truncate()
         self.file.close()
-
+        self.new_path = self.path
         if self.extra_info.get('filename'):
             self._decrypt_rename(self.extra_info.get('filename'))
         return self
@@ -169,6 +172,7 @@ class DecryptWriter(object):
         if self._file is not None and not self._file.closed:
             self.file.close()
         os.rename(self.path, new_name)
+        self.new_path = new_name
         return self
 
 
