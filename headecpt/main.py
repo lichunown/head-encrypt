@@ -4,20 +4,10 @@ import click
 
 from headecpt import __version__
 from headecpt.rws.rw import EncryptWriter, DecryptWriter
-from headecpt.encrypt_funcs import EncryptType
+from headecpt.encrypt_funcs import encrypt_str_map
 
 
 logging.basicConfig(level=logging.INFO)
-
-
-encrypt_str_map = {
-    None: None,  # 根据是否提供password动态选择
-    '': EncryptType.NO_ENCRYPT,
-    'no': EncryptType.NO_ENCRYPT,
-    'RC4': EncryptType.RC4,
-    'rc4': EncryptType.RC4,
-    'padding': EncryptType.PADDING,
-}
 
 
 class IntOrStrType(click.ParamType):
@@ -112,7 +102,6 @@ def traverse_ten(dir_path, head_size, type, password, remain_name, filter_suffix
 @click.option('-f', '--filter_suffix', default='mp4|jpg|png|mov|jpeg|ts',
               help="文件后缀名，用`|`进行分割")
 def ten(dir_path, head_size, type, password, remain_name, filter_suffix):
-    print(type, f'{type.__class__.__name__}')
     traverse_ten(dir_path, head_size, type, password, remain_name, filter_suffix)
 
 

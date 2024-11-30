@@ -46,3 +46,12 @@ decrypt_func_map: Dict[EncryptType, Callable[[str, bytes], bytes]] = {
     EncryptType.RC4: rc4_decrypt_func,
     EncryptType.PADDING: padding_decrypt_func,
 }
+
+encrypt_str_map = {
+    None: None,  # 根据是否提供password动态选择
+    '': EncryptType.NO_ENCRYPT,
+    'no': EncryptType.NO_ENCRYPT,
+    'RC4': EncryptType.RC4,
+    'rc4': EncryptType.RC4,
+    'padding': EncryptType.PADDING,
+}
