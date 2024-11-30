@@ -16,6 +16,7 @@ encrypt_str_map = {
     'no': EncryptType.NO_ENCRYPT,
     'RC4': EncryptType.RC4,
     'rc4': EncryptType.RC4,
+    'padding': EncryptType.PADDING,
 }
 
 
@@ -38,7 +39,7 @@ def main(version):
 
 @main.command(help="Encrypt the files")
 @click.argument('path', type=click.Path(exists=True), nargs=-1)
-@click.option('-t', '--type', default=None, type=click.Choice(['rc4', 'no', None]),
+@click.option('-t', '--type', default=None, type=click.Choice(list(encrypt_str_map.keys())),
               help="加密方式：no为无密钥加密，rc4为有密钥加密")
 @click.option('-h', '--head_size', default=1024, type=IntOrStrType(), help="待加密文件头大小")
 @click.option('-p', '--password', hide_input=True, confirmation_prompt=True, default='',
@@ -101,7 +102,7 @@ def traverse_ten(dir_path, head_size, type, password, remain_name, filter_suffix
 
 @main.command(help="Traverse dirs and encrypt the matching files")
 @click.argument('dir_path', type=click.Path(exists=True), nargs=-1)
-@click.option('-t', '--type', default=None, type=click.Choice(['rc4', 'no', None]),
+@click.option('-t', '--type', default=None, type=click.Choice(list(encrypt_str_map.keys())),
               help="加密方式：no为无密钥加密，rc4为有密钥加密")
 @click.option('-h', '--head_size', default=1024, type=IntOrStrType(), help="待加密文件头大小")
 @click.option('-p', '--password', hide_input=True, confirmation_prompt=True, default='',
