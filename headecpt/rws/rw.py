@@ -1,7 +1,7 @@
 import _io
 import os
 from enum import ReprEnum
-from typing import Union, Optional, Dict
+from typing import Union, Optional, Dict, Literal
 import hashlib
 import pickle as pk
 
@@ -39,7 +39,11 @@ class EncryptWriter(object):
             self._file = open(self.path, 'r+b')
         return self._file
 
-    def create_encrypt_info(self, head_size=1024, encrypt_type: EncryptType = None, key='', extra_info=None):
+    def create_encrypt_info(self, head_size: Union[int, Literal['all']] = 1024,
+                            encrypt_type: EncryptType = None, key='', extra_info=None):
+        
+        if isinstance(head_size, str) and head_size == 'all':
+            head_size = os.path.getsize(self.path)
         if head_size < HeadInfo.__len__():
             raise ValueError(f'Head size cannot less than {HeadInfo.__len__()}')
         file_size = os.path.getsize(self.path)

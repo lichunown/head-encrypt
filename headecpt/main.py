@@ -3,7 +3,7 @@ import logging
 import click
 
 from headecpt import __version__
-from headecpt.rw import EncryptWriter, DecryptWriter
+from headecpt.rws.rw import EncryptWriter, DecryptWriter
 from headecpt.encrypt_funcs import EncryptType
 
 
@@ -11,12 +11,22 @@ logging.basicConfig(level=logging.INFO)
 
 
 encrypt_str_map = {
-    None: EncryptType.NO_ENCRYPT,
+    None: None,  # 根据是否提供password动态选择
     '': EncryptType.NO_ENCRYPT,
     'no': EncryptType.NO_ENCRYPT,
     'RC4': EncryptType.RC4,
     'rc4': EncryptType.RC4,
 }
+
+
+class IntOrStrType(click.ParamType):
+    name = 'int_or_str'
+
+    def convert(self, value, param, ctx):
+        try:
+            return int(value)
+        except ValueError:
+            return value
 
 
 @click.group()
@@ -28,9 +38,9 @@ def main(version):
 
 @main.command(help="Encrypt the files")
 @click.argument('path', type=click.Path(exists=True), nargs=-1)
-@click.option('-t', '--type', default=None, type=click.Choice(['rc4', 'no']),
+@click.option('-t', '--type', default=None, type=click.Choice(['rc4', 'no', None]),
               help="加密方式：no为无密钥加密，rc4为有密钥加密")
-@click.option('-h', '--head_size', default=1024, type=int, help="待加密文件头大小")
+@click.option('-h', '--head_size', default=1024, type=IntOrStrType(), help="待加密文件头大小")
 @click.option('-p', '--password', hide_input=True, confirmation_prompt=True, default='',
               help="加密密钥，若不指定则默认no加密方法，指定则默认为rc4方法")
 @click.option('--remain_name', is_flag=True,
@@ -91,16 +101,17 @@ def traverse_ten(dir_path, head_size, type, password, remain_name, filter_suffix
 
 @main.command(help="Traverse dirs and encrypt the matching files")
 @click.argument('dir_path', type=click.Path(exists=True), nargs=-1)
-@click.option('-t', '--type', default=None, type=click.Choice(['rc4', 'no']),
+@click.option('-t', '--type', default=None, type=click.Choice(['rc4', 'no', None]),
               help="加密方式：no为无密钥加密，rc4为有密钥加密")
-@click.option('-h', '--head_size', default=1024, type=int, help="待加密文件头大小")
+@click.option('-h', '--head_size', default=1024, type=IntOrStrType(), help="待加密文件头大小")
 @click.option('-p', '--password', hide_input=True, confirmation_prompt=True, default='',
               help="加密密钥，若不指定则默认no加密方法，指定则默认为rc4方法")
 @click.option('--remain_name', is_flag=True,
               help="是否对文件名进行加密，默认加密，若不加密则指定--without-name")
-@click.option('-f', '--filter_suffix', default='mp4|jpg|png|mov|jpeg',
+@click.option('-f', '--filter_suffix', default='mp4|jpg|png|mov|jpeg|ts',
               help="文件后缀名，用`|`进行分割")
 def ten(dir_path, head_size, type, password, remain_name, filter_suffix):
+    print(type, f'{type.__class__.__name__}')
     traverse_ten(dir_path, head_size, type, password, remain_name, filter_suffix)
 
 
