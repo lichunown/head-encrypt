@@ -14,7 +14,7 @@ class _Struct(object):
         return y, data[len(y):]  # noqa
 
 
-class _IntSize(int, _Struct):
+class _IntType(int, _Struct):
 
     __byte_size__ = None
 
@@ -56,27 +56,27 @@ class _Bytes(bytes, _Struct):
         return cls.__byte_size__
 
 
-class MD5(_Bytes):
+class MD5Type(_Bytes):
     __byte_size__ = 8
 
 
-class IntSize(_IntSize):
+class IntType(_IntType):
     __byte_size__ = 4
 
 
-class ShortSize(_IntSize):
+class ShortType(_IntType):
     __byte_size__ = 2
 
 
-class CharSize(_IntSize):
+class CharType(_IntType):
     __byte_size__ = 1
 
 
-class ShortSizeEnum(ShortSize, ReprEnum):
+class ShortSizeEnum(ShortType, ReprEnum):
     pass
 
 
-class VersionType(CharSize):
+class VersionType(CharType):
     V1 = 0
 
 

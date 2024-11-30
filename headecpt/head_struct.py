@@ -4,11 +4,11 @@ from enum import ReprEnum
 from typing import Union, Optional
 import hashlib
 
-from headecpt.basic_struct import VersionType, IntSize, ShortSize, MD5, MetaDataLazyParser, LazyParser
+from headecpt.basic_struct import VersionType, IntType, ShortType, MD5Type, MetaDataLazyParser, LazyParser
 from headecpt.encrypt_funcs import EncryptType
 from headecpt.encrypt_funcs import encrypt_func_map, decrypt_func_map
 
-MD5_MAX_SIZE = MD5.__byte_size__
+MD5_MAX_SIZE = MD5Type.__byte_size__
 
 
 def md5(data: bytes) -> bytes:
@@ -22,26 +22,26 @@ class _Stream(object):
 
 class HeadInfo(_Stream):
 
-    __magic__code__ = IntSize.from_bytes(b'\x54\x63\x0e\x1a')
+    __magic__code__ = IntType.from_bytes(b'\x54\x63\x0e\x1a')
 
-    magic_code: ShortSize
+    magic_code: ShortType
     version: VersionType        # 编码版本
     encrypt_type: EncryptType   # 加密方式
-    total_size: IntSize         # 总文件大小
-    pre_encrypt_size: IntSize   # 加密前数据大小
-    after_encrypt_size: IntSize # 加密后数据大小
-    extra_size: IntSize         # 额外数据大小
-    encrypt_md5: MD5        # 验证解码后数据正确与否的md5
+    total_size: IntType         # 总文件大小
+    pre_encrypt_size: IntType   # 加密前数据大小
+    after_encrypt_size: IntType # 加密后数据大小
+    extra_size: IntType         # 额外数据大小
+    encrypt_md5: MD5Type        # 验证解码后数据正确与否的md5
 
     _struct = {
-        'magic_code': IntSize,
+        'magic_code': IntType,
         'version': VersionType,        # 编码版本
         'encrypt_type': EncryptType,   # 加密方式
-        'total_size': IntSize,         # 总文件大小
-        'pre_encrypt_size': IntSize,   # 加密前数据大小
-        'after_encrypt_size': IntSize, # 加密后数据大小
-        'extra_size': IntSize,         # 额外数据大小
-        'encrypt_md5': MD5,        # 验证解码后数据正确与否的md5
+        'total_size': IntType,         # 总文件大小
+        'pre_encrypt_size': IntType,   # 加密前数据大小
+        'after_encrypt_size': IntType, # 加密后数据大小
+        'extra_size': IntType,         # 额外数据大小
+        'encrypt_md5': MD5Type,        # 验证解码后数据正确与否的md5
     }
 
     @classmethod

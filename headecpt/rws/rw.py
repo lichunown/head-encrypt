@@ -5,12 +5,12 @@ from typing import Union, Optional, Dict, Literal
 import hashlib
 import pickle as pk
 
-from headecpt.basic_struct import VersionType, IntSize, ShortSize, MD5, MetaDataLazyParser, LazyParser
+from headecpt.basic_struct import VersionType, IntType, ShortType, MD5Type, MetaDataLazyParser, LazyParser
 from headecpt.head_struct import HeadInfo, DynamicData
 from headecpt.encrypt_funcs import EncryptType
 from headecpt.encrypt_funcs import encrypt_func_map, decrypt_func_map, encrypt_str_map
 
-MD5_MAX_SIZE = MD5.__byte_size__
+MD5_MAX_SIZE = MD5Type.__byte_size__
 
 
 def md5(data: bytes) -> bytes:
