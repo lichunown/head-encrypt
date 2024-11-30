@@ -7,6 +7,7 @@ class EncryptType(ShortSizeEnum):
     NO_ENCRYPT = 0
     RC4 = 1
     PADDING = 2
+    REVERSE = 3
 
 
 
@@ -15,6 +16,12 @@ def no_encrypt_func(key: str, x: bytes) -> bytes:
 
 def no_decrypt_func(key: str, x: bytes) -> bytes:
     return x
+
+def reverse_encrypt_func(key: str, x: bytes) -> bytes:
+    return x[::-1]
+
+def reverse_decrypt_func(key: str, x: bytes) -> bytes:
+    return x[::-1]
 
 def padding_encrypt_func(key: str, x: bytes) -> bytes:
     return len(x) * b'\x00' + x[::-1]
@@ -39,12 +46,14 @@ encrypt_func_map: Dict[EncryptType, Callable[[str, bytes], bytes]] = {
     EncryptType.NO_ENCRYPT: no_encrypt_func,
     EncryptType.RC4: rc4_encrypt_func,
     EncryptType.PADDING: padding_encrypt_func,
+    EncryptType.REVERSE: reverse_encrypt_func,
 }
 
 decrypt_func_map: Dict[EncryptType, Callable[[str, bytes], bytes]] = {
     EncryptType.NO_ENCRYPT: no_decrypt_func,
     EncryptType.RC4: rc4_decrypt_func,
     EncryptType.PADDING: padding_decrypt_func,
+    EncryptType.REVERSE: reverse_decrypt_func,
 }
 
 encrypt_str_map = {
@@ -54,4 +63,5 @@ encrypt_str_map = {
     'RC4': EncryptType.RC4,
     'rc4': EncryptType.RC4,
     'padding': EncryptType.PADDING,
+    'reverse': EncryptType.REVERSE,
 }

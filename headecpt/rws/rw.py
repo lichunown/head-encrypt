@@ -8,7 +8,7 @@ import pickle as pk
 from headecpt.basic_struct import VersionType, IntSize, ShortSize, MD5, MetaDataLazyParser, LazyParser
 from headecpt.head_struct import HeadInfo, DynamicData
 from headecpt.encrypt_funcs import EncryptType
-from headecpt.encrypt_funcs import encrypt_func_map, decrypt_func_map
+from headecpt.encrypt_funcs import encrypt_func_map, decrypt_func_map, encrypt_str_map
 
 MD5_MAX_SIZE = MD5.__byte_size__
 
@@ -40,19 +40,23 @@ class EncryptWriter(object):
         return self._file
 
     def create_encrypt_info(self, head_size: Union[int, Literal['all']] = 1024,
-                            encrypt_type: EncryptType = None, key='', extra_info=None):
-        
+                            encrypt_type: Union[EncryptType, str, None] = None, key='', extra_info=None):
+
+        if isinstance(encrypt_type, str):
+            encrypt_type = encrypt_str_map[encrypt_type]
+
+        file_size = os.path.getsize(self.path)
         if isinstance(head_size, str) and head_size == 'all':
-            head_size = os.path.getsize(self.path)
+            head_size = file_size
+        head_size = min(head_size, file_size)
+
         if head_size < HeadInfo.__len__():
             raise ValueError(f'Head size cannot less than {HeadInfo.__len__()}')
-        file_size = os.path.getsize(self.path)
-        head_size = min(head_size, file_size)
 
         self.file_size = file_size
         if encrypt_type is None:
             if key is None or len(key) <= 0:
-                encrypt_type = EncryptType.NO_ENCRYPT
+                encrypt_type = EncryptType.REVERSE
             else:
                 encrypt_type = EncryptType.RC4
         self.encrypt_type = encrypt_type

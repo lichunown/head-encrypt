@@ -37,16 +37,15 @@ def main(version):
 @click.option('--remain_name', is_flag=True,
               help="是否对文件名进行加密，默认加密，若不加密则指定--without-name")
 def en(path, head_size, type, password, remain_name):
-    encrypt_type = encrypt_str_map[type]
     if len(path) <= 0:
         logging.error('You must input a file path.')
     for p in path:
         try:
             if remain_name:
-                EncryptWriter(p).create_encrypt_info(head_size, encrypt_type, password).encrypt()
+                EncryptWriter(p).create_encrypt_info(head_size, type, password).encrypt()
                 logging.info(f'Encrypt: {p}')
             else:
-                res = EncryptWriter(p).create_encrypt_info(head_size, encrypt_type, password).encrypt_with_name()
+                res = EncryptWriter(p).create_encrypt_info(head_size, type, password).encrypt_with_name()
                 logging.info(f'Encrypt: {p} --> {res.new_name}')
         except Exception as e:
             logging.error(f'{e}')
@@ -68,7 +67,6 @@ def de(path, password = ''):
 
 
 def traverse_ten(dir_path, head_size, type, password, remain_name, filter_suffix):
-    encrypt_type = encrypt_str_map[type]
     matching_suffix = filter_suffix.split('|')
     if len(dir_path) <= 0:
         logging.error('You must input a dir_path path.')
@@ -81,10 +79,10 @@ def traverse_ten(dir_path, head_size, type, password, remain_name, filter_suffix
                 if sub_path.split('.')[-1] in matching_suffix:
                     try:
                         if remain_name:
-                            EncryptWriter(all_path).create_encrypt_info(head_size, encrypt_type, password).encrypt()
+                            EncryptWriter(all_path).create_encrypt_info(head_size, type, password).encrypt()
                             logging.info(f'Encrypt: {p}')
                         else:
-                            res = EncryptWriter(all_path).create_encrypt_info(head_size, encrypt_type, password).encrypt_with_name()
+                            res = EncryptWriter(all_path).create_encrypt_info(head_size, type, password).encrypt_with_name()
                             logging.info(f'Encrypt: {p} --> {res.new_name}')
                     except Exception as e:
                         logging.error(f'{e}')
